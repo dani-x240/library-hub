@@ -201,24 +201,36 @@ export type Database = {
       }
       profiles: {
         Row: {
+          biometric_enabled: boolean
           created_at: string
           full_name: string | null
           id: string
           library_name: string | null
+          pin_hash: string | null
+          pin_salt: string | null
+          pin_set_at: string | null
           updated_at: string
         }
         Insert: {
+          biometric_enabled?: boolean
           created_at?: string
           full_name?: string | null
           id: string
           library_name?: string | null
+          pin_hash?: string | null
+          pin_salt?: string | null
+          pin_set_at?: string | null
           updated_at?: string
         }
         Update: {
+          biometric_enabled?: boolean
           created_at?: string
           full_name?: string | null
           id?: string
           library_name?: string | null
+          pin_hash?: string | null
+          pin_salt?: string | null
+          pin_set_at?: string | null
           updated_at?: string
         }
         Relationships: []
