@@ -59,13 +59,6 @@ function AuthPage() {
     navigate({ to: "/dashboard" });
   };
 
-  const handleGoogle = async () => {
-    setLoading(true);
-    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/dashboard" });
-    if (result.error) { setLoading(false); return toast.error("Google sign-in failed"); }
-    if (result.redirected) return;
-    navigate({ to: "/dashboard" });
-  };
 
   return (
     <div className="min-h-screen bg-background">
