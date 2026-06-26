@@ -9,48 +9,56 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
 
-      - uses: oven-sh/setup-bun@v2
+      - name: Setup Bun Environment
+        uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
-      - uses: actions/setup-java@v4
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: "21"
 
-      - uses: android-actions/setup-android@v3
+      - name: Setup Android SDK Tools
+        uses: android-actions/setup-android@v3
 
-      - name: Install dependencies
+      - name: Install Project Dependencies
         run: bun install
 
-      - name: Build web app
+      - name: Build Web Application Assets
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
           VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID }}
-        run: bun run build
+        run: bunx vite build --outDir dist
 
-      - name: Add Capacitor (first run only)
+      - name: Initialize Capacitor Configuration (Fallback)
         run: |
           if [ ! -f "capacitor.config.ts" ] && [ ! -f "capacitor.config.json" ]; then
             bun add @capacitor/core @capacitor/cli @capacitor/android
             bunx cap init "LibraryOS" "app.lovable.libraryos" --web-dir=dist
           fi
 
-      - name: Ensure Android platform
+      - name: Ensure Android Native Platform Layout
         run: |
           if [ ! -d "android" ]; then
             bunx cap add android
           fi
           bunx cap sync android
 
-      - name: Build debug APK
+      - name: Grant Gradle Execute Permissions
+        run: chmod +x android/gradlew
+
+      - name: Compile Unsigned Debug APK
         working-directory: android
         run: ./gradlew assembleDebug
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload APK Artifact for Download
+        uses: actions/upload-artifact@v4
         with:
           name: LibraryOS-debug-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
