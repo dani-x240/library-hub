@@ -1,4 +1,16 @@
 {
+  "name": "library-hub",
+  "private": true,
+  "version": "0.0.0",
+  "type": "commonjs", 
+  "main": "main.js", 
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  }
+}
+
+{
   "name": "tanstack_start_ts",
   "private": true,
   "sideEffects": false,
@@ -90,3 +102,4 @@
     "vite": "^8.0.16"
   }
 }
+
